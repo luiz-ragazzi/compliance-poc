@@ -1,0 +1,6 @@
+npm was not running 
+Needed to install Node.js and fix the environment variables in Windows
+https://www.codewithharry.com/blogpost/solving-npm-not-recognized-error-windows
+
+Also have to install :
+ python -m pip install "fastapi[standard]"
