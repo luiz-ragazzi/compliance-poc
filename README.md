@@ -2,15 +2,47 @@
 
 A minimal full-stack app to upload PDFs, store their embeddings locally, and run semantic search.
 
+## Project Structure
+
 ```
-pdf-rag-poc/
-├── backend/
-│   ├── main.py           ← FastAPI app
-│   └── requirements.txt
-└── frontend/
-    └── src/
-        └── App.jsx       ← React UI (drop into any Vite/CRA project)
+compliance-assistant-poc/
+├── Backend (Python modules with separation of concerns)
+│   ├── main.py              ← FastAPI application entry point
+│   ├── config.py            ← Configuration management
+│   ├── database.py          ← Database operations
+│   ├── embedder.py          ← Embedding model handling
+│   ├── models.py            ← Data models
+│   ├── pdf_processor.py     ← PDF processing logic
+│   └── requirements.txt     ← Python dependencies
+│
+├── Frontend (React + Vite)
+│   ├── src/
+│   │   ├── App.jsx          ← React UI component
+│   │   ├── main.jsx         ← Application entry
+│   │   └── assets/
+│   ├── public/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   └── eslint.config.js
+│
+└── chroma_db/               ← Vector database storage (persisted locally)
 ```
+
+---
+
+## Backend Module Architecture
+
+The backend follows a **separation of concerns** pattern with each module handling a specific responsibility:
+
+| Module | Responsibility |
+|---|---|
+| `main.py` | FastAPI application, route definitions, request/response handling |
+| `config.py` | Configuration constants and settings management |
+| `database.py` | ChromaDB operations and document management |
+| `embedder.py` | Embedding model initialization and inference |
+| `models.py` | Data models and schemas (Pydantic models, type definitions) |
+| `pdf_processor.py` | PDF parsing, text extraction, and chunking logic |
 
 ---
 
@@ -26,15 +58,17 @@ pdf-rag-poc/
 
 ---
 
-## Backend setup
+## Backend Setup
 
 ```bash
-cd backend
+# Install dependencies
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+# Windows: .venv\Scripts\activate | macOS/Linux: source .venv/bin/activate
+.venv\Scripts\activate
 
 pip install -r requirements.txt
 
+# Run the FastAPI server
 uvicorn main:app --reload --port 8000
 ```
 
@@ -76,7 +110,7 @@ npm run dev   # starts on http://localhost:3000
 
 ## Configuration
 
-Edit the constants at the top of `main.py`:
+Edit the constants in `config.py`:
 
 ```python
 CHROMA_PATH   = "./chroma_db"   # where ChromaDB persists data
